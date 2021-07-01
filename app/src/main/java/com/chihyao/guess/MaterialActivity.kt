@@ -1,21 +1,36 @@
 package com.chihyao.guess
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import kotlinx.android.synthetic.main.activity_main.*
+import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_material.*
+import kotlinx.android.synthetic.main.content_material.*
 
-class MainActivity : AppCompatActivity() {
+class MaterialActivity : AppCompatActivity() {
     val secretNumber = SecretNumber()
-    val TAG = MainActivity::class.java.simpleName
-
+    val TAG = MaterialActivity::class.java.simpleName
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_material)
+        setSupportActionBar(toolbar)
         Log.d( TAG,"secret:" + secretNumber.secret)
+
+        fab.setOnClickListener { view ->
+            AlertDialog.Builder(this)
+                .setTitle("Replay game")
+                .setPositiveButton(getString(R.string.ok), {dialog, which ->
+                    secretNumber.reset()
+                    counter.setText(secretNumber.count.toString())
+                    number.setText("")
+                })
+                .setNeutralButton("Cancel",null)
+                .show()
+        }
+        counter.setText(secretNumber.count.toString())
     }
     fun check(view : View){
         val n = number.text.toString().toInt()
@@ -28,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         }else if(diff > 0){
             message = getString(R.string.smaller)
         }
+        counter.setText(secretNumber.count.toString())
 //        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.dialog_title))
@@ -35,4 +51,5 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton(getString(R.string.ok), null)
             .show()
     }
+
 }
