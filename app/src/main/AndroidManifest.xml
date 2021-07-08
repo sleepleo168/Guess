@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.chihyao.guess">
 
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/numbers_icon_128px"
@@ -10,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Guess"
         android:usesCleartextTraffic="true">
-        <activity android:name=".NewsActivity"></activity>
+        <activity android:name=".NewsActivity"/>
         <activity android:name=".SnookerActivity" />
         <activity android:name=".RecordListActivity" />
         <activity android:name=".RecordActivity" />
@@ -28,12 +32,6 @@
 
         <service android:name=".CacheService" />
     </application>
-    <uses-feature
-        android:name="android.hardware.camera2"
-        android:required="true" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>
