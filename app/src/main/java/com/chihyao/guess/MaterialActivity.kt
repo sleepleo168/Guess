@@ -1,22 +1,13 @@
 package com.chihyao.guess
 
-import android.content.DialogInterface
 import android.content.Intent
-import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.loader.content.AsyncTaskLoader
-import androidx.room.Room
-import com.chihyao.guess.data.GameDataBase
-import com.chihyao.guess.data.Record
 import kotlinx.android.synthetic.main.activity_material.*
 import kotlinx.android.synthetic.main.content_material.*
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
 
 class MaterialActivity : AppCompatActivity() {
     private val REQUEST_RECORD = 100
@@ -100,14 +91,22 @@ class MaterialActivity : AppCompatActivity() {
     }
 
     fun check(view : View){
+        if (number.text.isEmpty()) {
+            showError("please input a number(1-10)")
+            return
+        }
         val n = number.text.toString().toInt()
+        if (n !in 1..10) {
+            showError("number must in 1-10")
+            return
+        }
         println("number: $n")
-        Log.d( TAG,"number:" + n)
+        Log.d(TAG, "number:" + n)
         val diff = secretNumber.validate(n)
         var message = getString(R.string.yes_you_got_it)
-        if(diff < 0){
+        if (diff < 0) {
             message = getString(R.string.bigger)
-        }else if(diff > 0){
+        } else if (diff > 0) {
             message = getString(R.string.smaller)
         }
         counter.setText(secretNumber.count.toString())
@@ -115,14 +114,22 @@ class MaterialActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.dialog_title))
             .setMessage(message)
-            .setPositiveButton(getString(R.string.ok), {dialog,which ->
-                if(diff == 0){
+            .setPositiveButton(getString(R.string.ok), { dialog, which ->
+                if (diff == 0) {
                     val intent = Intent(this, RecordActivity::class.java)
                     intent.putExtra("COUNTER", secretNumber.count)
                     startActivityForResult(intent, REQUEST_RECORD)
 //                    startActivity(intent)
                 }
             })
+            .show()
+    }
+
+    private fun showError(errMsg : String) {
+        AlertDialog.Builder(this)
+            .setTitle("Error")
+            .setMessage(errMsg)
+            .setPositiveButton(getString(R.string.ok), null)
             .show()
     }
 
